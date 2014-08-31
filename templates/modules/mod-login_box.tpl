@@ -100,12 +100,12 @@ if (jqueryTiki.no_cookie) {
 		</form>
 		{/if}
 	{elseif $prefs.auth_method eq 'cas' && $showloginboxes neq 'y'}
-		<b><a class="linkmodule" href="tiki-login.php?cas=y">{tr}Log in through CAS{/tr}</a></b>
+		<b><a class="linkmodule" href="2ttiki-login.php?cas=y">{tr}Log in through CAS{/tr}</a></b>
 		{if $prefs.cas_skip_admin eq 'y'}
 			<br><a class="linkmodule" href="tiki-login_scr.php?user=admin">{tr}Log in as admin{/tr}</a>
 		{/if}
 	{elseif $prefs.auth_method eq 'shib' && $showloginboxes neq 'y'}
-		<b><a class="linkmodule" href="tiki-login.php">{tr}Log in through Shibboleth{/tr}</a></b>
+		<b><a class="linkmodule" href="2ttiki-login.php">{tr}Log in through Shibboleth{/tr}</a></b>
 		{if $prefs.shib_skip_admin eq 'y'}
 			<br><a class="linkmodule" href="tiki-login_scr.php?user=admin">{tr}Log in as admin{/tr}</a>
 		{/if}
@@ -114,14 +114,14 @@ if (jqueryTiki.no_cookie) {
 		{if $mode eq "popup"}
 			<div class="siteloginbar_popup dropdown btn-group pull-right">
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-				    <a href="tiki-login.php"></a>
+				    <a href="2ttiki-login.php"></a>
 					    {tr}Log in{/tr}
 					    <span class="caret"></span>
                 </button>
 				<div class="siteloginbar_poppedup {*panel panel-body*} dropdown-menu pull-right">
 						{capture assign="close_tags"}</div></div></div></div>{$close_tags}{/capture}
 		{/if}
-		<form name="loginbox" class="form" id="loginbox-{$module_logo_instance}" action="{$login_module.login_url|escape}"
+		<form name="loginbox" class="form" id="loginbox-{$module_logo_instance}" action="2ttiki-login.php"
 				method="post" {if $prefs.feature_challenge eq 'y'}onsubmit="doChallengeResponse()"{/if}
 				{if $prefs.desactive_login_autocomplete eq 'y'} autocomplete="off"{/if}> 
 		{if $prefs.feature_challenge eq 'y'}

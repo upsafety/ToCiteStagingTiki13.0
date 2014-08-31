@@ -2517,7 +2517,8 @@ class UsersLib extends TikiLib
 				}
 			}
 
-			$body = "<a title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\" href=\"$url\" class=\"$class\"$extra>" . $body . '</a>';
+			//$body = "<a title=\"" . htmlspecialchars($title, ENT_QUOTES) . "\" href=\"$url\" class=\"$class\"$extra>" . $body . '</a>';
+			$body = "<a href='#' style='cursor:default'>" . $body . '</a>';
 			return $body;
 		}
 		return $body;

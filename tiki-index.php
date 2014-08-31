@@ -7,7 +7,10 @@
  * @licence Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
 // $Id: tiki-index.php 52036 2014-07-19 20:34:17Z nkoth $
-
+if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="")  {
+	//$_SESSION['client_code'] = $_REQUEST['clientcode'];
+	setcookie("client_code", $_REQUEST['clientcode'],time()+1800);
+}
 require_once ('check_composer_exists.php');
 
 $inputConfiguration = array(

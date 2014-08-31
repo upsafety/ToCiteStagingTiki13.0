@@ -12,7 +12,7 @@
 		{/if}
         {if $prefs.feature_layoutshadows eq 'y'}<div id="main-shadow">{eval var=$prefs.main_shadow_start}{/if}
             {if $prefs.feature_layoutshadows eq 'y'}<div id="header-shadow">{eval var=$prefs.header_shadow_start}{/if}
-                <!--<div class="header_outer">
+                <div class="header_outer">
                     <div class="header_container">
 		                <header class="container header page-header">
 			                <div class="row">
@@ -22,7 +22,7 @@
                             </div>
                         </header>
 			        </div>
-                </div>-->
+                </div>
             {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.header_shadow_end}</div>{/if}
             <div class="middle_outer">
                 <div class="container clearfix middle" id="middle">
@@ -116,7 +116,9 @@
                         <div class="footerbgtrap container">
 		        	        <div class="row">
 				                <div class="col-md-12">
-					                {modulelist zone=bottom}
+					               <!-- {modulelist zone=bottom}-->
+								   United Public Safety / Ph. 215-394-1906 / Fax. 215-394-1908 /<a href='mailto:support@upsafety.net'>
+            support@upsafety.net</a> / <a target="_blank" href="http://www.upsafety.net">www.upsafety.net</a>
 				                </div>
                             </div>
                         </div>

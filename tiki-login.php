@@ -7,7 +7,7 @@
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 // $Id: tiki-login.php 50849 2014-04-21 11:19:55Z jonnybradley $
-
+//session_start();
 $inputConfiguration = array(
 	array( 'staticKeyFilters' => array(
 		'user' => 'text',
@@ -23,7 +23,7 @@ if (empty($_POST['user'])) {
 }
 require_once ('tiki-setup.php');
 $login_url_params = '';
-
+/*
 if (isset($_REQUEST['cas']) && $_REQUEST['cas'] == 'y' && $prefs['auth_method'] == 'cas') {
 	$login_url_params = '?cas=y';
 	$_REQUEST['user'] = '';
@@ -35,14 +35,15 @@ if (isset($_REQUEST['cas']) && $_REQUEST['cas'] == 'y' && $prefs['auth_method'] 
 	}
 	die;
 }
+*/
 $smarty->assign('errortype', 'login'); // to avoid any redirection to the login box if error
 // Alert user if cookies are switched off
-if (ini_get('session.use_cookies') == 1 && !isset($_COOKIE[ session_name() ]) && $prefs['session_silent'] != 'y') {
+/*if (ini_get('session.use_cookies') == 1 && !isset($_COOKIE[ session_name() ]) && $prefs['session_silent'] != 'y') {
 	$smarty->assign('msg', tra('You have to enable cookies to be able to login to this site'));
 	$smarty->display('error.tpl');
 	exit;
 }
-
+*/
 // Redirect to HTTPS if we are not in HTTPS but we require HTTPS login
 if (!$https_mode && $prefs['https_login'] == 'required') {
 	header('Location: ' . $base_url_https . $prefs['login_url'] . $login_url_params);
@@ -84,10 +85,27 @@ if (isset($_REQUEST['su'])) {
 		if ($userlib->user_exists($_REQUEST['username'])) {
 			$loginlib->switchUser($_REQUEST['username']);
 		}
-		
+
 		$access->redirect($_SESSION['loginfrom']);
 	}
 }
+if(!isset($_REQUEST['error'])) {
+	$res = $tikilib->query("SELECT userId FROM users_users WHERE login=?", array($_REQUEST['user']));
+	$row=$res->fetchRow();
+	$userId = $row['userId'];
+	if($userId==NULL || $userId=="") {
+		$user_type = $_REQUEST['user_type'];
+		$email = $_REQUEST['email'];
+		$dateTime = strtotime("now");
+		$res = $tikilib->query("INSERT INTO users_users (email,login, default_group,registrationDate,pass_confirm,email_confirm,created) VALUES(?,?,?,?,?,?,?)", array($email,$_REQUEST['user'],$user_type,$dateTime,$dateTime,$dateTime,$dateTime));
+		$res = $tikilib->query("SELECT userId FROM users_users WHERE login=?", array($_REQUEST['user']));
+		$row=$res->fetchRow();
+		$userId = $row['userId'];
+		$res = $tikilib->query("INSERT INTO users_usergroups (userId,groupName,created) VALUES(?,?,?)", array($userId,$user_type,$dateTime));
+	}
+	$res = $tikilib->query("UPDATE users_users SET fname=?, lname=?, appUserId=?, clientId=?, clientCode=? WHERE userId=?", array($_REQUEST['fname'],$_REQUEST['lname'],$_REQUEST['appuserid'],$_REQUEST['clientid'],$_REQUEST['clientcode'],$userId));
+}			
+		
 $requestedUser = isset($_REQUEST['user']) ? $_REQUEST['user'] : false;
 $pass = isset($_REQUEST['pass']) ? $_REQUEST['pass'] : false;
 $challenge = isset($_REQUEST['challenge']) ? $_REQUEST['challenge'] : false;
@@ -190,15 +208,35 @@ if (isset($_REQUEST['intertiki']) and in_array($_REQUEST['intertiki'], array_key
 	}
 } else {
 	// Verify user is valid
-	$ret = $userlib->validate_user($requestedUser, $pass, $challenge, $response);
+	//$ret = $userlib->validate_user($requestedUser, $pass, $challenge, $response);
+	if(isset($_REQUEST['error']) && $_REQUEST['error']!="") {
+		$ret[0] = 0;
+		$ret[1] = $requestedUser;
+		$ret[2] = -3;
+		$ret[3] = '';
+	}
+	else {
+		$ret[0] = 1;
+		$ret[1] = $requestedUser;
+		$ret[2] = 2;
+		$ret[3] = '';
+		$user = $requestedUser;
+		$res1 = $tikilib->query("SELECT fname,lname FROM users_users WHERE login=?", array($user));
+		$row1=$res1->fetchRow();
+		$fname = $row1['fname'];
+		$lname = $row1['lname']; 
+		$smarty->assign('fname',$fname);
+	}
 	if (count($ret) == 3) {
 		$ret[] = null;
 	}
 	list($isvalid, $requestedUser, $error, $method) = $ret;
+	
+	//print_r($ret); exit;
 	// If the password is valid but it is due then force the user to change the password by
 	// sending the user to the new password change screen without letting him use tiki
 	// The user must re-enter the old password so no security risk here
-	if (!$isvalid && $error === ACCOUNT_WAITING_USER) {
+	/*if (!$isvalid && $error === ACCOUNT_WAITING_USER) {
 		if ($requestedUser != 'admin') { // admin has not necessarely an email
 
 			if ($userlib->is_email_due($requestedUser, 'email')) {
@@ -217,10 +255,11 @@ if (isset($_REQUEST['intertiki']) and in_array($_REQUEST['intertiki'], array_key
 	} else if ($isvalid) {
 		$isdue = $userlib->is_due($requestedUser, $method);
 		$user = $requestedUser;
-	}
+	}*/
+	
 }
 if ($isvalid) {
-        $userlib->set_unsuccessful_logins($requestedUser, 0);
+      /*  $userlib->set_unsuccessful_logins($requestedUser, 0);
 	if ($prefs['feature_invite'] == 'y') {
 		// tiki-invite, this part is just here to add groups to users which just registered after received an
 		// invitation via tiki-invite.php and set the redirect to wiki page if required by the invitation
@@ -242,7 +281,7 @@ if ($isvalid) {
 			if (!empty($inviterow['wikipageafter'])) $_REQUEST['page']=$inviterow['wikipageafter'];
 		}
 	}
-
+	*/
 	if ($isdue) {
 		// Redirect the user to the screen where he must change his password.
 		// Note that the user is not logged in he's just validated to change his password
@@ -333,6 +372,7 @@ if ($isvalid) {
 			// This happens if the user has just registered and it's first login
 			if ($url == '' || preg_match('/(tiki-register|tiki-login_validate|tiki-login_scr)\.php/', $url)) $url = $prefs['tikiIndex'];
 			// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
+			
 			if ($prefs['rememberme'] != 'disabled' && isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
 				$userInfo = $userlib->get_user_info($user);
 				$userId = $userInfo['userId'];
@@ -340,11 +380,15 @@ if ($isvalid) {
 				setcookie($user_cookie_site, $secret . '.' . $userId, $tikilib->now + $prefs['remembertime'], $prefs['cookie_path'], $prefs['cookie_domain']);
 				$logslib->add_log('login', 'got a cookie for ' . $prefs['remembertime'] . ' seconds');
 			}
+			if(isset($_REQUEST['page']) && $_REQUEST['page']!='') {
+				$url = 'tiki-index.php?page='.$_REQUEST['page'];
+			}
 		}
 	}
 } else {	// if ($isvalid) - invalid
 	// check if site is closed
-	if ($prefs['site_closed'] === 'y') {
+	//echo "falsed"; exit;
+	/*if ($prefs['site_closed'] === 'y') {
 		unset($bypass_siteclose_check);
 		include 'lib/setup/site_closed.php';
 	}
@@ -357,7 +401,7 @@ if ($isvalid) {
 	$smarty->assign('module_params', $module_params);
 	if ($error == PASSWORD_INCORRECT && ($prefs['unsuccessful_logins'] >= 0 || $prefs['unsuccessful_logins_invalid'] >= 0)) {
 		$nb_bad_logins = $userlib->unsuccessful_logins($requestedUser);
-		$nb_bad_logins++ ; 
+		$nb_bad_logins++ ;
 		$userlib->set_unsuccessful_logins($requestedUser, $nb_bad_logins);
 		if ($prefs['unsuccessful_logins_invalid'] > 0 && ($nb_bad_logins >= $prefs['unsuccessful_logins_invalid'])) {
 			$info = $userlib->get_user_info($requestedUser);
@@ -401,10 +445,16 @@ if ($isvalid) {
 			die;
 		}
 	}
+	*/
+	//echo $error.$_REQUEST['error']; exit;
 	switch ($error) {
-		case PASSWORD_INCORRECT:
-			$error = tra('Invalid username or password');
-        		break;
+		/*case PASSWORD_INCORRECT:
+			$error = 'Invalid username or password';
+        	$smarty->assign('msg', $error);
+			$smarty->assign('mid', 'tiki-login.tpl');
+			$smarty->display('error.tpl');
+			exit;
+			
 
 		case USER_NOT_FOUND:
 			$smarty->assign('error_login', $error);
@@ -421,7 +471,7 @@ if ($isvalid) {
 			$error = tra('You did not validate your account.');
 			$extraButton = array('href'=>'tiki-send_mail.php?user='. urlencode($_REQUEST['user']), 'text'=>tra('Resend'), 'comment'=>tra('You should have received an email. Check your mailbox and your spam box. Otherwise click on the button to resend the email'));
         		break;
- 
+
 		case USER_AMBIGOUS:
 			$error = tra('You must use the right case for your user name.');
         		break;
@@ -433,13 +483,15 @@ if ($isvalid) {
 		case USER_ALREADY_LOGGED:
 			$error = tra('You are already logged in.');
         		break;
-
+		*/
 		default:
-			$error = tra('Invalid username or password');
+			$error = $_REQUEST['error'];//tra('Invalid username or password');
 	}
-	if (isset($extraButton)) $smarty->assign_by_ref('extraButton', $extraButton);
-
+	//if (isset($extraButton)) $smarty->assign_by_ref('extraButton', $extraButton);
+	//echo $error; exit;
 	//	Report error "inline" with the login module
+	$error = $_REQUEST['error'];
+	//echo $_REQUEST['error']; exit;
 	$smarty->assign('error_login', $error);
 	$smarty->assign('mid', 'tiki-login.tpl');
 	$smarty->display('tiki.tpl');
