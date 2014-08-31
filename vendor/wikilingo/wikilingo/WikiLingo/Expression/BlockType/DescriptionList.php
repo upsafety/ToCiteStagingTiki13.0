@@ -1,0 +1,96 @@
+<?php
+namespace WikiLingo\Expression\BlockType;
+
+use WikiLingo;
+use WikiLingo\Expression\Block;
+
+/**
+ * Class DescriptionList
+ * @package WikiLingo\Expression
+ */
+class DescriptionList
+{
+    /**
+     * @var WikiLingo\Parsed
+     */
+    public $parsed;
+
+    /**
+     * @var WikiLingo\Parser
+     */
+    public $parser;
+
+    /**
+     * @var \WikiLingo\Expression\Block
+     */
+    public $block;
+
+    /**
+     * @var DescriptionListItem[]
+     */
+    public $items = array();
+
+    /**
+     * @param Block $block
+     */
+    public function __construct(Block $block)
+	{
+		$this->parsed = $block->parsed;
+		$this->block = $block;
+		$termSet = false;
+		$term = '';
+		$description = '';
+
+		foreach($this->parsed->children as $child) {
+			if ($child->text == ':' && $termSet == false) {
+				$termSet = true;
+			} else if ($termSet == false) {
+				$term .= $child->text;
+			} else {
+				$description .= $child->text;
+			}
+		}
+
+		$this->items[] = new DescriptionListItem($term, $description);
+		$this->parser = $this->parsed->parser;
+		$this->parser->addType($this);
+	}
+
+    /**
+     * @param Block $block
+     */
+    public function add(Block $block)
+	{
+		$termSet = false;
+		$term = '';
+		$description = '';
+
+		foreach($block->parsed->children as $child) {
+			if ($child->text == ':' && $termSet == false) {
+				$termSet = true;
+			} else if ($termSet == false) {
+				$term .= $child->text;
+			} else {
+				$description .= $child->text;
+			}
+		}
+
+		$this->items[] = new DescriptionListItem($term, $description);
+	}
+
+    /**
+     * @param $renderer
+     * @param $parser
+     * @return mixed
+     */
+    public function render($renderer, $parser)
+	{
+		$element = $renderer->element(__CLASS__, 'dl');
+
+		foreach ($this->items as $item) {
+			$element->staticChildren[] = $item->render($renderer, $parser);
+		}
+
+		return $element->render();
+	}
+}
