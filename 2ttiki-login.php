@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 require_once("EncryptService.php");
 $eyptService = new EncryptService();
 $web_config_xml = simplexml_load_file('tikiweb.config');
