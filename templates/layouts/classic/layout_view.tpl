@@ -12,7 +12,7 @@
 		{/if}
         {if $prefs.feature_layoutshadows eq 'y'}<div id="main-shadow">{eval var=$prefs.main_shadow_start}{/if}
             {if $prefs.feature_layoutshadows eq 'y'}<div id="header-shadow">{eval var=$prefs.header_shadow_start}{/if}
-                <div class="header_outer">
+                <!--<div class="header_outer">
                     <div class="header_container">
 		                <header class="container header page-header">
 			                <div class="row">
@@ -22,7 +22,7 @@
                             </div>
                         </header>
 			        </div>
-                </div>
+                </div>-->
             {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.header_shadow_end}</div>{/if}
             <div class="middle_outer">
                 <div class="container clearfix middle" id="middle">
