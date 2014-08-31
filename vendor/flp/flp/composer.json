@@ -1,0 +1,44 @@
+{
+     "name": "flp/flp",
+     "description": "FutureLink-Protocol implementation in PHP",
+     "homepage": "https://github.com/FutureLink-Protocol",
+     "authors": [
+         {
+             "name": "Robert Plummer",
+             "email": "rplummer@visop-dev.com",
+             "homepage": "http://visop-dev.com",
+             "role": "Lead Developer"
+         },
+         {
+             "name": "Luke Gerhardt",
+             "email": "luke@totaldigitalconsulting.com",
+             "homepage": "http://totaldigitalconsulting.com",
+             "role": "Developer"
+         }
+     ],
+     "require": {
+         "php": ">=5.4.0",
+	     "gabordemooij/redbean": ">=3.5.1",
+	     "rangy/rangy": ">=1.3",
+	     "jquery/jquery": ">=1.10.2",
+	     "jquery/jquery-ui": ">=1.10.3",
+	     "md5/md5": ">=1.1.0"
+     },
+    "require-dev": {
+        "bafs/testify": "dev-master",
+        "tablesorter/tablesorter": "dev-master"
+    },
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/marco-fiset/Testify.php.git"
+		}
+	],
+     "autoload": {
+         "psr-0": {
+             "FLP": "",
+             "Phraser": "",
+	         "RedBean_": ""
+         }
+     }
+ }
