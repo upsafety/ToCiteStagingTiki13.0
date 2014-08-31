@@ -7,6 +7,7 @@ $wsdl = (String)$web_config_xml->children()->url;
 $encUser = $eyptService->decrypt($_REQUEST['user']);
 $encUser = str_replace("\0","",$encUser);
 $userArray = explode(",",$encUser);
+print_r($userArray); exit;
 if(count($userArray)==3) {
 	$user = trim($userArray[0]); 
 	$client_id = trim($userArray[1]); 
