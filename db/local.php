@@ -1,10 +1,10 @@
 <?php
 $db_tiki='mysql';
 $dbversion_tiki='12.2';
-$host_tiki='localhost';
-$user_tiki='root';
-$pass_tiki='password@1';
-$dbs_tiki='tikiwiki';
+$host_tiki='us-cdbr-azure-central-a.cloudapp.net';
+$user_tiki='b7d8f272cd194c';
+$pass_tiki='0f2cf929';
+$dbs_tiki='cdb_e590a74b27';
 $client_charset='utf8';
 // If you experience text encoding issues after updating (e.g. apostrophes etc showing up as strange characters) 
 // $client_charset='latin1';
