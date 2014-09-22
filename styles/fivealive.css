@@ -5854,6 +5854,9 @@ textarea,
 /*header.header .sitetitles {  font-family: Paneuropa, "Bitstream Vera Sans", Arial, Helvetica, sans-serif;}*/
 header.header .sitetitles {
   font-family: Paneuropa, "Bitstream Vera Sans", Arial, Helvetica, sans-serif;
+  margin-top:55px;
+  margin-left:186px:
+  white-space:nowrap;
 }
 header.header .sitetitle,
 header.header .sitesubtitle {
