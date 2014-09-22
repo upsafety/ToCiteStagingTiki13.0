@@ -15,7 +15,48 @@
  * @global array $prefs
  * @global array $tikilib
  */
+ 
+ 
+ global $is_dashboard;
+$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="" && isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="" && $_COOKIE['client_code']!=$_REQUEST['clientcode']) {	
+	 header("location: tiki-logout.php");
+}
+if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="") {	
+		setcookie("client_code", $_REQUEST['clientcode']);
+}
+//if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
+	//	setcookie("IsDashboard", $_REQUEST['IsDashboard']);
+//}
+if(isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="") {
+	$customAddText="clientcode=".$_COOKIE['client_code'];
+}
+if(isset($is_dashboard) && $is_dashboard!="" && $is_dashboard==1 && strstr($actual_link,"IsDashboard")=='') {
+	$customAddText=$customAddText."&IsDashboard=".$is_dashboard;
+}
+
+$check1=strstr($actual_link,"clientcode");
+
+if($check1==''){
+    
+if($_GET){
+        
+//echo $actual_link."&".$customAddText;
+
+        header("location:".$actual_link."&".$customAddText);
+
+    }else{
+        
+//echo $actual_link."?".$customAddText;
+
+        header("location:".$actual_link."?".$customAddText);
+    
+}
+
+}
+
 global $prefs, $tikilib;
+$prefs['IsDashboard']=1;
 if (strpos($_SERVER['SCRIPT_NAME'], basename(__FILE__)) !== false) {
 	header('location: index.php');
 	exit;
@@ -156,6 +197,12 @@ if ($prefs['cookie_consent_feature'] === 'y') {
 	}
 }
 $smarty->assign('cookie_consent_html', $cookie_consent_html);
+if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
+	 $smarty->assign('IsDashboard', 1);
+}
+else {
+	$smarty->assign('IsDashboard', 0);
+}
 
 if ($prefs['feature_polls'] == 'y') {
 	require_once ('lib/setup/polls.php');

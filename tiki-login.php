@@ -383,6 +383,35 @@ if ($isvalid) {
 			if(isset($_REQUEST['page']) && $_REQUEST['page']!='') {
 				$url = 'tiki-index.php?page='.$_REQUEST['page'];
 			}
+			
+			if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
+				 $smarty->assign('IsDashboard', 1);
+				 $actual_link = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+				 $check1=strstr($actual_link,"page");
+				 $check2=strstr($actual_link,"Page");
+				if($check1=='' && $check2==''){
+					$url = $url."?IsDashboard=1";
+				}
+				else {
+					$url = $url."&IsDashboard=1";
+				}
+				if(isset($_REQUEST['blogId']) && $_REQUEST['blogId']!="") {
+					$url = "tiki-view_blog.php?blogId=".$_REQUEST['blogId']."&IsDashboard=1";
+				}
+				else {
+					$res = $tikilib->query("SELECT blogId FROM tiki_blogs where public='y' order by  blogId desc Limit 0,1");
+					$row=$res->fetchRow();
+					$blogId = $row['blogId'];
+					$url = "tiki-view_blog.php?blogId=".$blogId."&IsDashboard=1";
+				}
+				 
+				 
+				 
+			}
+			else {
+				$url = 'tiki-index.php';
+				$smarty->assign('IsDashboard', 0);
+			}
 		}
 	}
 } else {	// if ($isvalid) - invalid

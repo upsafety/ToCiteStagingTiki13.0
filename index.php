@@ -10,7 +10,7 @@
 // $Id: index.php 49810 2014-02-10 19:55:37Z jonnybradley $
 if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="")  {
 	//$_SESSION['client_code'] = $_REQUEST['clientcode'];
-	setcookie("client_code", $_REQUEST['clientcode'],time()+1800);
+	setcookie("client_code", $_REQUEST['clientcode']);
 }
 require_once ('check_composer_exists.php');
 

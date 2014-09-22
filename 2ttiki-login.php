@@ -1,5 +1,4 @@
 <?php
-//error_reporting(E_ALL);
 require_once("EncryptService.php");
 $eyptService = new EncryptService();
 $web_config_xml = simplexml_load_file('tikiweb.config');
@@ -7,25 +6,38 @@ $wsdl = (String)$web_config_xml->children()->url;
 $encUser = $eyptService->decrypt($_REQUEST['user']);
 $encUser = str_replace("\0","",$encUser);
 $userArray = explode(",",$encUser);
-//print_r($userArray); exit;
-if(count($userArray)==3) {
+if(isset($_REQUEST['IsDashboard'])) {
+	global $is_dashboard;
+	$GLOBALS['is_dashboard'] = $_REQUEST['IsDashboard'];
+}
+if(count($userArray)==4) {
 	$user = trim($userArray[0]); 
 	$client_id = trim($userArray[1]); 
-	$last_login = trim($userArray[2]); 
+	$last_login = trim($userArray[4]); 
 	if(isset($_REQUEST['page']) && $_REQUEST['page']!='') {
 		$page = $_REQUEST['page'];
 	}
 	else if(isset($_REQUEST['Page']) && $_REQUEST['Page']!='') {
 		$page = $_REQUEST['Page'];
 	}
-	
+	if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!='') {
+		$IsDashboard=$_REQUEST['IsDashboard'];
+	}
+	if(isset($_REQUEST['blogId']) && $_REQUEST['blogId']!='') {
+		$blogId=$_REQUEST['blogId'];
+	}
 	if(isset($wsdl) && $wsdl!="") {
 		$params = array('UserID'=>$user,'ClientID'=>$client_id,'LastLoggedOn'=>$last_login);
 		$my_cert_file = (String)$web_config_xml->children()->cert_file;
+		$log = "\nTime before service call".Date('y-m-d H:m:s');
+		file_put_contents('./access_log.txt', $log, FILE_APPEND);
 		$client = new SoapClient($wsdl,array('local_cert', $my_cert_file));
 		$json_result = $client->GetLoggedInUserDetails($params);
-		//print_r($json_result); exit;
 		$json_obj = json_decode($json_result->GetLoggedInUserDetailsResult);
+		$log = "\nTime after service call".Date('y-m-d H:m:s');
+		file_put_contents('./access_log.txt', $log, FILE_APPEND);
+		//print_r($json_result); exit;
+		
 		$is_valid_login = $json_obj->{'IsValidLoggin'}; 
 		if($is_valid_login) {
 			$email = $json_obj->{'EmailID'}; 
@@ -39,7 +51,7 @@ if(count($userArray)==3) {
 				$_POST['appuserid'] = $json_obj->{'UserId'};;
 				$_POST['clientid'] = $json_obj->{'ClientId'};;
 				$_POST['clientcode'] = $json_obj->{'ClientCode'};
-				setcookie("client_code", $json_obj->{'ClientCode'},time()+1800);
+				setcookie("client_code", $json_obj->{'ClientCode'});
 				if($is_admin) {
 					$_POST['user_type'] = "Admins";
 				}
@@ -51,13 +63,19 @@ if(count($userArray)==3) {
 				if(isset($page) && $page!='') {
 					$_POST['page'] = $page;
 				}
+				if(isset($IsDashboard) && $IsDashboard!='') {
+					$_POST['IsDashboard'] = $IsDashboard;
+				}
+				if(isset($blogId) && $blogId!='') {
+					$_POST['blogId'] = $blogId;
+				}
 				require_once('tiki-login.php');
 			}
 		}
 		else {
 			//if(isset($page) && $page!='') {
-				$redirect = (String)$web_config_xml->children()->tocotiteurl;
-				header('Location: '.$redirect);
+				//$redirect = (String)$web_config_xml->children()->tocotiteurl;
+				//header('Location: '.$redirect);
 			//}
 			//header('Location: index.php');
 			$_POST['user'] = $json_obj->{'UserName'};
@@ -99,10 +117,15 @@ else {
 		//echo $client_code; exit;
 		$params = array('UserName'=>$user,'Password'=>$password,'ClientCode'=>$client_code,'FailedLoginCount'=>$attempt);
 		$my_cert_file = (String)$web_config_xml->children()->cert_file;
+		
+		$log = "\nTime before service call".Date('y-m-d H:m:s');
+		file_put_contents('./access_log.txt', $log, FILE_APPEND);
 		$client = new SoapClient($wsdl,array('local_cert', $my_cert_file));
 		$json_result = $client->LogOn($params);
-		//print_r($json_result); exit;
 		$json_obj = json_decode($json_result->LogOnResult);
+		$log = "\nTime after service call".Date('y-m-d H:m:s');
+		file_put_contents('./access_log.txt', $log, FILE_APPEND);
+		//print_r($json_result); exit;
 		$is_valid_login = $json_obj->{'IsValidLoggin'}; 
 		if($is_valid_login) {
 			setcookie("attempt", '', time() - 3600);

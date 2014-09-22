@@ -27,5 +27,7 @@ if (!empty($_REQUEST['page'])) {
 } else {
 	$out_page = '';
 }
-
+if(isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="") {
+	$out_page = 'tiki-index.php?clientcode='.$_COOKIE['client_code'];
+}
 $userlib->user_logout($user, false, $out_page);

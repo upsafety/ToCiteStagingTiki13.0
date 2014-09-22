@@ -9,7 +9,7 @@
 // $Id: tiki-index.php 52036 2014-07-19 20:34:17Z nkoth $
 if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="")  {
 	//$_SESSION['client_code'] = $_REQUEST['clientcode'];
-	setcookie("client_code", $_REQUEST['clientcode'],time()+1800);
+	setcookie("client_code", $_REQUEST['clientcode']);
 }
 require_once ('check_composer_exists.php');
 
@@ -695,7 +695,12 @@ TikiLib::events()->trigger(
 		(is_array($info) ? $info : array())
 	)
 );
-
+if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
+	 $smarty->assign('IsDashboard', 1);
+}
+else {
+	$smarty->assign('IsDashboard', 0);
+}
 $smarty->assign('info', $info);
 $smarty->assign('mid', 'tiki-show_page.tpl');
 
