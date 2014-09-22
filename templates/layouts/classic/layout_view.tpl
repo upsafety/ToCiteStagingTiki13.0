@@ -12,7 +12,8 @@
 		{/if}
         {if $prefs.feature_layoutshadows eq 'y'}<div id="main-shadow">{eval var=$prefs.main_shadow_start}{/if}
             {if $prefs.feature_layoutshadows eq 'y'}<div id="header-shadow">{eval var=$prefs.header_shadow_start}{/if}
-                <div class="header_outer">
+                {if $IsDashboard ne 1}
+				<div class="header_outer">
                     <div class="header_container">
 		                <header class="container header page-header">
 			                <div class="row">
@@ -23,6 +24,7 @@
                         </header>
 			        </div>
                 </div>
+				{/if}
             {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.header_shadow_end}</div>{/if}
             <div class="middle_outer">
                 <div class="container clearfix middle" id="middle">
@@ -82,9 +84,11 @@
                             {/if}
                             {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.center_shadow_end}</div>{/if}
 				        </div>
+						{if $IsDashboard ne 1}
                         <div class="col-md-3 col-md-pull-9" id="col2">
                             {modulelist zone=left}
                         </div>
+						{/if}
 			        {else}
 		    	        <div class="col-md-8 col-md-push-2" id="col1">
                             {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
@@ -95,17 +99,23 @@
 					        {block name=title}{/block}
 							{block name=navigation}{/block}
 					        {block name=content}{/block}
+							{if $IsDashboard ne 1}
                             {if $prefs.module_zones_pagebottom eq 'fixed' or ($prefs.module_zones_pagebottom ne 'n' && ! zone_is_empty('pagebottom'))}
                                 {modulelist zone=pagebottom}
                             {/if}
+							{/if}
                             {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.center_shadow_end}</div>{/if}
     		            </div>
+						{if $IsDashboard ne 1}
                         <div class="col-md-2 col-md-pull-8" id="col2">
                             {modulelist zone=left}
                         </div>
+						{/if}
+						{if $IsDashboard ne 1}
                         <div class="col-md-2" id="col3">
 	       		            {modulelist zone=right}
 			            </div>
+						{/if}
 		            {/if}
 					</div>
 	            </div>
