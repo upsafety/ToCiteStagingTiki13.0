@@ -335,7 +335,6 @@ class KalturaClientBase
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		if (count($files) > 0)
 		{
 			foreach($files as &$file)
@@ -350,6 +349,7 @@ class KalturaClientBase
 		}
 		curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->config->userAgent);
 		if (count($files) > 0)
 			curl_setopt($ch, CURLOPT_TIMEOUT, 0);
