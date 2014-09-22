@@ -18,7 +18,7 @@
  
  
  global $is_dashboard;
-$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+$actual_link = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="" && isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="" && $_COOKIE['client_code']!=$_REQUEST['clientcode']) {	
 	 header("location: tiki-logout.php");
 }
