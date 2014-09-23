@@ -8,7 +8,7 @@
 <div id="upload-container">
 </div>
 <p id="more-media">
-	{button class="btn btn-default" _text="{tr}Add more media{/tr}" href="tiki-kaltura_upload.php"}
+	<span type="button" class="btn btn-default button">{button class="btn btn-default" _text="{tr}Add more media{/tr}" href="tiki-kaltura_upload.php"}</span>
 </p>
 {jq}
 var url = $.service('kaltura', 'upload');
