@@ -6,10 +6,6 @@ $wsdl = (String)$web_config_xml->children()->url;
 $encUser = $eyptService->decrypt($_REQUEST['user']);
 $encUser = str_replace("\0","",$encUser);
 $userArray = explode(",",$encUser);
-if(isset($_REQUEST['IsDashboard'])) {
-	global $is_dashboard;
-	$GLOBALS['is_dashboard'] = $_REQUEST['IsDashboard'];
-}
 if(count($userArray)==4) {
 	$user = trim($userArray[0]); 
 	$client_id = trim($userArray[1]); 
@@ -29,13 +25,13 @@ if(count($userArray)==4) {
 	if(isset($wsdl) && $wsdl!="") {
 		$params = array('UserID'=>$user,'ClientID'=>$client_id,'LastLoggedOn'=>$last_login);
 		$my_cert_file = (String)$web_config_xml->children()->cert_file;
-		$log = "\nTime before service call".Date('y-m-d H:m:s');
-		file_put_contents('./access_log.txt', $log, FILE_APPEND);
+		//$log = "\nTime before service call".Date('y-m-d H:m:s');
+		//file_put_contents('./access_log.txt', $log, FILE_APPEND);
 		$client = new SoapClient($wsdl,array('local_cert', $my_cert_file));
 		$json_result = $client->GetLoggedInUserDetails($params);
 		$json_obj = json_decode($json_result->GetLoggedInUserDetailsResult);
-		$log = "\nTime after service call".Date('y-m-d H:m:s');
-		file_put_contents('./access_log.txt', $log, FILE_APPEND);
+		//$log = "\nTime after service call".Date('y-m-d H:m:s');
+		//file_put_contents('./access_log.txt', $log, FILE_APPEND);
 		//print_r($json_result); exit;
 		
 		$is_valid_login = $json_obj->{'IsValidLoggin'}; 

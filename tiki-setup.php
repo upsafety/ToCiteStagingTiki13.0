@@ -17,7 +17,7 @@
  */
  
  
- global $is_dashboard;
+
 $actual_link = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="" && isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="" && $_COOKIE['client_code']!=$_REQUEST['clientcode']) {	
 	 header("location: tiki-logout.php");
@@ -25,14 +25,14 @@ if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="" && isset($_COOK
 if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="") {	
 		setcookie("client_code", $_REQUEST['clientcode']);
 }
-//if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
-	//	setcookie("IsDashboard", $_REQUEST['IsDashboard']);
-//}
+if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
+		$_SESSION['IsDashboard'] = 1;
+}
 if(isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="") {
 	$customAddText="clientcode=".$_COOKIE['client_code'];
 }
-if(isset($is_dashboard) && $is_dashboard!="" && $is_dashboard==1 && strstr($actual_link,"IsDashboard")=='') {
-	$customAddText=$customAddText."&IsDashboard=".$is_dashboard;
+if(isset($_SESSION['IsDashboard']) && $_SESSION['IsDashboard']!="" && $_SESSION['IsDashboard']==1 ) {
+	$customAddText=$customAddText."&IsDashboard=".$_SESSION['IsDashboard'];
 }
 
 $check1=strstr($actual_link,"clientcode");
