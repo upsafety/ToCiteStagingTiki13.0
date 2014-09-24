@@ -35,11 +35,6 @@ if(isset($is_dashboard) && $is_dashboard!="" && $is_dashboard==1 && strstr($actu
 	$customAddText=$customAddText."&IsDashboard=".$is_dashboard;
 }
 
-$referrer_link = $_SERVER['HTTP_REFERER'];
-if(strstr($referrer_link,"IsDashboard")<>'' && strstr($customAddText,"IsDashboard")=='') {
-	$customAddText=$customAddText."&IsDashboard=1";
-}
-
 $check1=strstr($actual_link,"clientcode");
 
 if($check1==''){
