@@ -30,7 +30,9 @@ if(isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="") {
 }
 
 if(stripos($_SERVER["HTTP_REFERER"], "IsDashboard=1")>0) {	
+	if(stripos($customAddText, "IsDashboard=1")=== false) {	
 		$customAddText=$customAddText."&IsDashboard=1";
+	}
 }
 
 $check1=strstr($actual_link,"clientcode");
