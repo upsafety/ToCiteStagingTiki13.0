@@ -25,15 +25,13 @@ if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="" && isset($_COOK
 if(isset($_REQUEST['clientcode']) && $_REQUEST['clientcode']!="") {	
 		setcookie("client_code", $_REQUEST['clientcode']);
 }
-//if(isset($_REQUEST['IsDashboard']) && $_REQUEST['IsDashboard']!="" && $_REQUEST['IsDashboard']==1) {	
-	//	$_SESSION['IsDashboard'] = 1;
-//}
 if(isset($_COOKIE['client_code']) && $_COOKIE['client_code']!="") {
 	$customAddText="clientcode=".$_COOKIE['client_code'];
 }
-//if(isset($_SESSION['IsDashboard']) && $_SESSION['IsDashboard']!="" && $_SESSION['IsDashboard']==1 ) {
-	//$customAddText=$customAddText."&IsDashboard=".$_SESSION['IsDashboard'];
-//}
+
+if(stripos($_SERVER["HTTP_REFERER"], "IsDashboard=1")>0) {	
+		$customAddText=$customAddText."&IsDashboard=1";
+}
 
 $check1=strstr($actual_link,"clientcode");
 
