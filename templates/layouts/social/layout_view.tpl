@@ -6,11 +6,11 @@
 	</head>
 	<body{html_body_attributes class="navbar-padding"}>
 		{$cookie_consent_html}
-
+		{if $IsDashboard ne 1}
 		{if $prefs.feature_ajax eq 'y'}
 			{include file='tiki-ajax_header.tpl'}
 		{/if}
-		
+		{/if}
 		<div class="container">
 
 			<div class="row">
@@ -34,9 +34,11 @@
                             {modulelist zone=pagebottom}
                         {/if}
 					</div>
+					{if $IsDashboard ne 1}
 					<div class="col-md-3" id="col3">
 						{modulelist zone=right}
 					</div>
+					{/if}
 				{elseif zone_is_empty('right')}
 					<div class="col-md-9 col-md-push-3" id="col1">
 						{block name=title}{/block}
@@ -47,9 +49,11 @@
                             {modulelist zone=pagebottom}
                         {/if}
 					</div>
+					{if $IsDashboard ne 1}
 					<div class="col-md-3 col-md-pull-9" id="col2">
 						{modulelist zone=left}
 					</div>
+					{/if}
 				{else}
 					<div class="col-md-8 col-md-push-2" id="col1">
 						{block name=title}{/block}
@@ -60,22 +64,25 @@
                             {modulelist zone=pagebottom}
                         {/if}
 					</div>
+					{if $IsDashboard ne 1}
 					<div class="col-md-2 col-md-pull-8" id="col2">
 						{modulelist zone=left}
 					</div>
 					<div class="col-md-2" id="col3">
 						{modulelist zone=right}
 					</div>
+					{/if}
 				{/if}
 			</div>
-
+			{if $IsDashboard ne 1}
 			<div class="row">
 				<div class="col-md-12 well">
 					{modulelist zone=bottom}
 				</div>
 			</div>
+			{/if}
 		</div>
-
+		{if $IsDashboard ne 1}
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<!-- Brand and toggle get grouped for better mobile display -->
@@ -123,7 +130,7 @@
 				</div>
 			</div>
 		</nav>
-
+		{/if}
 		{include file='footer.tpl'}
 	</body>
 </html>

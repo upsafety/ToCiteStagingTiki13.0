@@ -12,6 +12,7 @@
 		{/if}
 		
 		<div class="container">
+			{if $IsDashboard ne 1}
             <div class="row page-header">
 				<div class="col-md-12">
 					{modulelist zone=top}
@@ -22,7 +23,7 @@
 					{modulelist zone=topbar}
 				</div>
 			</div>
-
+			{/if}
 			<div class="row">
 				{if zone_is_empty('left') and zone_is_empty('right')}
 					<div class="col-md-12" id="col1">
@@ -50,9 +51,11 @@
                             {modulelist zone=pagebottom}
                         {/if}
 					</div>
+					{if $IsDashboard ne 1}
 					<div class="col-md-3" id="col3">
 						{modulelist zone=right}
 					</div>
+					{/if}
 				{elseif zone_is_empty('right')}
 					<div class="col-md-9 col-md-push-3" id="col1">
                         {if $prefs.module_zones_pagetop eq 'fixed' or ($prefs.module_zones_pagetop ne 'n' && ! zone_is_empty('pagetop'))}
@@ -66,9 +69,11 @@
                             {modulelist zone=pagebottom}
                         {/if}
 					</div>
+					{if $IsDashboard ne 1}
 					<div class="col-md-3 col-md-pull-9" id="col2">
 						{modulelist zone=left}
 					</div>
+					{/if}
 				{else}
 					<div class="col-md-8 col-md-push-2" id="col1">
                         {if $prefs.module_zones_pagetop eq 'fixed' or ($prefs.module_zones_pagetop ne 'n' && ! zone_is_empty('pagetop'))}
@@ -82,12 +87,14 @@
                             {modulelist zone=pagebottom}
                         {/if}
 					</div>
+					{if $IsDashboard ne 1}
 					<div class="col-md-2 col-md-pull-8" id="col2">
 						{modulelist zone=left}
 					</div>
 					<div class="col-md-2" id="col3">
 						{modulelist zone=right}
 					</div>
+					{/if}
 				{/if}
 			</div>
 

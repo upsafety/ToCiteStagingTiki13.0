@@ -6,11 +6,11 @@
 	</head>
 	<body{html_body_attributes}>
 		{$cookie_consent_html}
-
+		{if $IsDashboard ne 1}
 		{if $prefs.feature_ajax eq 'y'}
 			{include file='tiki-ajax_header.tpl'}
 		{/if}
-
+		
         <div class="header_outer">
             <div class="header_container">
 		        <header class="container header page-header">
@@ -22,15 +22,18 @@
                 </header>
 			</div>
         </div>
+		{/if}
         <div class="middle_outer">
             <div class="container clearfix middle" id="middle">
-                <div id="tiki-top" class="topbar">
+                {if $IsDashboard ne 1}
+				<div id="tiki-top" class="topbar">
 		        	<div class="row">
 				        <div class="col-md-12">
 					        {modulelist zone=topbar}
 				        </div>
 			        </div>
                 </div>
+				{/if}
                 <div class="row">
    			        {if zone_is_empty('left') and zone_is_empty('right')}
                         {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
@@ -62,9 +65,11 @@
                             {/if}
 				        </div>
                     {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.center_shadow_end}</div>{/if}
-				        <div class="col-md-3" id="col3">
+				        {if $IsDashboard ne 1}
+						<div class="col-md-3" id="col3">
 					        {modulelist zone=right}
 				        </div>
+						{/if}
 			        {elseif zone_is_empty('right')}
                         {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
 				        <div class="col-md-9 col-md-push-3" id="col1">
@@ -80,9 +85,11 @@
                             {/if}
 				        </div>
                         {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.center_shadow_end}</div>{/if}
-                        <div class="col-md-3 col-md-pull-9" id="col2">
+                        {if $IsDashboard ne 1}
+						<div class="col-md-3 col-md-pull-9" id="col2">
                             {modulelist zone=left}
                             </div>
+						{/if}
 			        {else}
                     {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
 			        <div class="col-md-6 col-md-push-3" id="col1">
@@ -98,17 +105,20 @@
                         {/if}
 				    </div>
                         {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.center_shadow_end}</div>{/if}
-                        <div class="col-md-3 col-md-pull-6" id="col2">
+                        {if $IsDashboard ne 1}
+						<div class="col-md-3 col-md-pull-6" id="col2">
                             {modulelist zone=left}
                         </div>
                         <div class="col-md-3" id="col3">
 		    		        {modulelist zone=right}
 				        </div>
+						{/if}
 			        {/if}
 			    </div>
             </div>
 		</div>
-                <footer class="footer" id="footer">
+                {if $IsDashboard ne 1}
+				<footer class="footer" id="footer">
                     <div class="footer_liner">
                         <div class="footerbgtrap container">
 		        	        <div class="row">
@@ -121,6 +131,7 @@
 		        </footer>
 
 		{include file='footer.tpl'}
+		{/if}
 		{if isset($prefs.socialnetworks_user_firstlogin) && $prefs.socialnetworks_user_firstlogin == 'y'}
 			{include file='tiki-socialnetworks_firstlogin_launcher.tpl'}
 		{/if}
