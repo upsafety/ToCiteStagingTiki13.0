@@ -4,7 +4,7 @@
 		{include file='header.tpl'}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
-	<body{html_body_attributes class="navbar-padding"}>
+	<body {if $IsDashboard ne 1} {html_body_attributes class="navbar-padding"} {/if} {if $IsDashboard eq 1} style="padding-top:0px;"{/if}>
 		{$cookie_consent_html}
 		{if $IsDashboard ne 1}
 		{if $prefs.feature_ajax eq 'y'}
@@ -15,7 +15,7 @@
 
 			<div class="row">
 				{if zone_is_empty('left') and zone_is_empty('right')}
-					<div class="col-md-12" id="col1">
+					<div {if $IsDashboard ne 1}class="col-md-12" {/if} {if $IsDashboard eq 1} style="left:0%; width:100%" {/if} id="col1">
 						{block name=title}{/block}
 						{block name=navigation}{/block}
 						{error_report}
@@ -25,7 +25,7 @@
                         {/if}
 					</div>
 				{elseif zone_is_empty('left')}
-					<div class="col-md-9" id="col1">
+					<div {if $IsDashboard ne 1}class="col-md-9" {/if} {if $IsDashboard eq 1} style="left:0%; width:100%" {/if} id="col1">
 						{block name=title}{/block}
 						{block name=navigation}{/block}
 						{error_report}
@@ -40,7 +40,7 @@
 					</div>
 					{/if}
 				{elseif zone_is_empty('right')}
-					<div class="col-md-9 col-md-push-3" id="col1">
+					<div {if $IsDashboard ne 1}class="col-md-9 col-md-push-3"{/if} id="col1" {if $IsDashboard eq 1} style="left:0%; width:100%" {/if}>
 						{block name=title}{/block}
 						{block name=navigation}{/block}
 						{error_report}
@@ -55,7 +55,7 @@
 					</div>
 					{/if}
 				{else}
-					<div class="col-md-8 col-md-push-2" id="col1">
+					 <div {if $IsDashboard ne 1}class="col-md-8 col-md-push-2"{/if}{if $IsDashboard eq 1} style="left:0%; width:100%" {/if} id="col1">
 						{block name=title}{/block}
 						{block name=navigation}{/block}
 						{error_report}
