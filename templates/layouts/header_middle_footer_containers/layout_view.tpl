@@ -4,7 +4,7 @@
 		{include file='header.tpl'}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
-	<body{html_body_attributes}>
+	<body {if $IsDashboard ne 1} {html_body_attributes} {/if} {if $IsDashboard eq 1} {/if}style="padding-top:0px;"{/if}>
 		{$cookie_consent_html}
 		{if $IsDashboard ne 1}
 		{if $prefs.feature_ajax eq 'y'}
@@ -38,7 +38,7 @@
                 <div class="row">
    			        {if zone_is_empty('left') and zone_is_empty('right')}
                         {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
-    			        <div class="col-md-12" id="col1">
+    			        <div {if $IsDashboard ne 1} class="col-md-12" {/if} id="col1" {if $IsDashboard eq 1} style="left:0%; width:100%" {/if}>
                             {if $prefs.module_zones_pagetop eq 'fixed' or ($prefs.module_zones_pagetop ne 'n' && ! zone_is_empty('pagetop'))}
                                 {modulelist zone=pagetop}
                             {/if}
@@ -53,7 +53,7 @@
                         {if $prefs.feature_layoutshadows eq 'y'}{eval var=$prefs.center_shadow_end}</div>{/if}
 			        {elseif zone_is_empty('left')}
                     {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
-				        <div class="col-md-9" id="col1">
+				        <div {if $IsDashboard ne 1}class="col-md-9"{/if} id="col1" {if $IsDashboard eq 1} style="left:0%; width:100%" {/if}>
                             {if $prefs.module_zones_pagetop eq 'fixed' or ($prefs.module_zones_pagetop ne 'n' && ! zone_is_empty('pagetop'))}
                                 {modulelist zone=pagetop}
                             {/if}
@@ -73,7 +73,7 @@
 						{/if}
 			        {elseif zone_is_empty('right')}
                         {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
-				        <div class="col-md-9 col-md-push-3" id="col1">
+				        <div {if $IsDashboard ne 1}class="col-md-9 col-md-push-3"{/if} id="col1" {if $IsDashboard eq 1} style="left:0%; width:100%" {/if}>
                             {if $prefs.module_zones_pagetop eq 'fixed' or ($prefs.module_zones_pagetop ne 'n' && ! zone_is_empty('pagetop'))}
                                 {modulelist zone=pagetop}
                             {/if}
@@ -93,7 +93,7 @@
 						{/if}
 			        {else}
                             {if $prefs.feature_layoutshadows eq 'y'}<div id="tiki-center-shadow">{eval var=$prefs.center_shadow_start}{/if}
-			        <div class="col-md-8 col-md-push-2" id="col1">
+			         <div {if $IsDashboard ne 1}class="col-md-8 col-md-push-2"{/if}{if $IsDashboard eq 1} style="left:0%; width:100%" {/if} id="col1">
                         {if $prefs.module_zones_pagetop eq 'fixed' or ($prefs.module_zones_pagetop ne 'n' && ! zone_is_empty('pagetop'))}
                             {modulelist zone=pagetop}
                         {/if}
